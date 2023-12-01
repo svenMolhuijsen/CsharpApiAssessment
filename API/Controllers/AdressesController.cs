@@ -2,6 +2,7 @@
 using API.Repositories;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.Eventing.Reader;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,46 +25,83 @@ namespace API.Controllers
         [HttpGet]
         public IActionResult GetAddresses()
         {
-            List<Address> addresses = _addressRepository.GetAdresses();
-            return Ok(addresses);
+            try
+            {
+                List<Address> addresses = _addressRepository.GetAdresses();
+                if(addresses.Count == 0)
+                {
+                    return NoContent(); //204
+                }
+
+                return Ok(addresses); //200
+            }catch (Exception ex)
+            {
+                //LogException(ex); not a requirement, not implemented
+                return StatusCode(500); //500
+            }
         }
 
         // GET api/Addresses/5
         [HttpGet("{id}")]
         public IActionResult GetAddress(int id)
         {
-            var address = _addressRepository.GetAddress(id);
-
-            if (address == null)
+      
+            try
             {
-                return NotFound();
-            }
+                var address = _addressRepository.GetAddress(id);
 
-            return Ok(address);
+                if (address == null)
+                {
+                    return NoContent(); //204
+                }
+
+                return Ok(address); //200
+            }
+            catch (Exception ex)
+            {
+                //LogException(ex); not a requirement, not implemented
+                return StatusCode(500); //500
+            }
         }
 
         // POST api/Addresses
         [HttpPost]
         public IActionResult AddAddress([FromBody] Address address)
         {
-            var newAddress = _addressRepository.AddAddress(address);
-            return CreatedAtAction(nameof(GetAddress), new { id = newAddress.Id }, newAddress);
+            try
+            {
+                var newAddress = _addressRepository.AddAddress(address);
+                return CreatedAtAction(nameof(GetAddress), new { id = newAddress.Id }, newAddress);
+            }
+            catch (Exception ex)
+            {
+                //LogException(ex); not a requirement, not implemented
+                return StatusCode(500); //500
+            }
         }
 
         // PUT api/Addresses/5
         [HttpPut("{id}")]
         public IActionResult UpdateAddress(int id, [FromBody] Address updatedAddress)
         {
-            var existingAddress = _addressRepository.GetAddress(id);
-
-            if (existingAddress == null)
+            try
             {
-                return NotFound();
+                var existingAddress = _addressRepository.GetAddress(id);
+                updatedAddress.Id = id;
+                if (existingAddress == null)
+                {
+                    return NotFound();
+                }
+
+                _addressRepository.UpdateAddress(updatedAddress);
+
+                return NoContent();
             }
-
-            _addressRepository.UpdateAddress(updatedAddress);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                //LogException(ex); not a requirement, not implemented
+                return StatusCode(500); //500
+            }
         }
 
         // DELETE api/Addresses/5
