@@ -28,13 +28,13 @@ namespace API.Controllers
             try
             {
                 List<Address> addresses = _addressRepository.GetAdresses();
-                if(addresses.Count == 0)
+                if (addresses.Count == 0)
                 {
                     return NoContent(); //204
                 }
 
                 return Ok(addresses); //200
-            }catch (Exception ex)
+            } catch (Exception ex)
             {
                 //LogException(ex); not a requirement, not implemented
                 return StatusCode(500); //500
@@ -45,7 +45,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public IActionResult GetAddress(int id)
         {
-      
+
             try
             {
                 var address = _addressRepository.GetAddress(id);
@@ -64,7 +64,24 @@ namespace API.Controllers
             }
         }
 
-        // POST api/Addresses
+
+
+        // GET api/Addresses
+        [HttpGet("{searchValue}/{sortBy}/{ascending}")]
+        public IActionResult GetAddresses(string searchValue, string sortBy, bool ascending = true )
+        {
+          
+                List<Address> addresses = _addressRepository.GetAddresses(searchValue, sortBy, ascending);
+
+                if (addresses.Count == 0)
+                {
+                    return NoContent(); // 204
+                }
+
+                return Ok(addresses); // 200
+         
+        }
+
         [HttpPost]
         public IActionResult AddAddress([FromBody] Address address)
         {
@@ -88,12 +105,13 @@ namespace API.Controllers
             {
                 var existingAddress = _addressRepository.GetAddress(id);
                 updatedAddress.Id = id;
+
                 if (existingAddress == null)
                 {
                     return NotFound();
                 }
 
-                _addressRepository.UpdateAddress(updatedAddress);
+                _addressRepository.UpdateAddress(updatedAddress , id);
 
                 return NoContent();
             }

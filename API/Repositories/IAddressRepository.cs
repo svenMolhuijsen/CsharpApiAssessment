@@ -6,8 +6,9 @@ namespace API.Repositories
     {
         List<Address> GetAdresses();
         Address GetAddress(int id);
+        List<Address> GetAddresses(string searchValue, string sortBy, bool ascending);
         Address AddAddress(Address address);
-        Address UpdateAddress(Address address);
+        Address UpdateAddress(Address address, int id);
         Address DeleteAddress(int id);
     }
 }
