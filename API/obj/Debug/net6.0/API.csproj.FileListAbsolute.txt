@@ -67,3 +67,4 @@ C:\Users\smolh\source\repos\CsharpApiAssessment\API\bin\Debug\net6.0\System.Diag
 C:\Users\smolh\source\repos\CsharpApiAssessment\API\bin\Debug\net6.0\Humanizer.dll
 C:\Users\smolh\source\repos\CsharpApiAssessment\API\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\smolh\source\repos\CsharpApiAssessment\API\bin\Debug\net6.0\GeoCoordinate.NetCore.dll
+C:\Users\smolh\source\repos\CsharpApiAssessment\API\bin\Debug\net6.0\API.xml

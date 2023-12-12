@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SxC770cm3Kn/cEG/Y9wjgK+QS6sO2rAwmUmISQknYgcRDwdQSXo3KxI4Pc52E81wkc6d4TJNB4MZWqFB/yxSQg==",
+  "dgSpecHash": "baxF9sPycI7XMqzAxAM5O9srqmGk6hnX/RyNrSGMGpfmyYRja9UZSUaHjlGNeicG4JiyiD0LmvLuo19SLv4Q/A==",
   "success": true,
   "projectFilePath": "C:\\Users\\smolh\\source\\repos\\CsharpApiAssessment\\API\\API.csproj",
   "expectedPackageFiles": [
@@ -43,8 +43,8 @@
     "C:\\Users\\smolh\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\smolh\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\smolh\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
-    "C:\\Users\\smolh\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
     "C:\\Users\\smolh\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.25\\microsoft.windowsdesktop.app.ref.6.0.25.nupkg.sha512",
+    "C:\\Users\\smolh\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.25\\microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
     "C:\\Users\\smolh\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.25\\microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512",
     "C:\\Users\\smolh\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.25\\microsoft.netcore.app.host.win-x64.6.0.25.nupkg.sha512"
   ],

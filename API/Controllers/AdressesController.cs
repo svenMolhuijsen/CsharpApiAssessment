@@ -28,10 +28,16 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Gets all addresses.
+        /// Retrieves all addresses.
         /// </summary>
         /// <returns>Returns a list of all addresses.</returns>
+        /// <response code="200">Returns a list of all addresses.</response>
+        /// <response code="204">No addresses found.</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<Address>), 200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(500)]
         public IActionResult GetAddresses()
         {
             try
@@ -50,18 +56,24 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log and handle exceptions (not implemented in this example)
+                // Log and handle exceptions (not implemented)
                 // Return 500 - Internal Server Error for unhandled exceptions
                 return StatusCode(500);
             }
         }
 
         /// <summary>
-        /// Gets an address by ID.
+        /// Retrieves an address by ID.
         /// </summary>
         /// <param name="id">The ID of the address.</param>
         /// <returns>Returns the address with the specified ID.</returns>
+        /// <response code="200">Returns the address with the specified ID.</response>
+        /// <response code="204">No address found.</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Address), 200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(500)]
         public IActionResult GetAddress(int id)
         {
             try
@@ -80,20 +92,26 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log and handle exceptions (not implemented in this example)
+                // Log and handle exceptions (not implemented)
                 // Return 500 - Internal Server Error for unhandled exceptions
                 return StatusCode(500);
             }
         }
 
         /// <summary>
-        /// Gets filtered and sorted addresses.
+        /// Retrieves filtered and sorted addresses.
         /// </summary>
         /// <param name="searchValue">The search value for filtering.</param>
         /// <param name="sortBy">The property name for sorting.</param>
         /// <param name="ascending">Indicates whether to sort in ascending order (default is true).</param>
         /// <returns>Returns filtered and sorted addresses.</returns>
+        /// <response code="200">Returns filtered and sorted addresses.</response>
+        /// <response code="204">No addresses found.</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpGet("{searchValue}/{sortBy}/{ascending}")]
+        [ProducesResponseType(typeof(List<Address>), 200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(500)]
         public IActionResult GetAddresses(string searchValue, string sortBy, bool ascending = true)
         {
             try
@@ -112,7 +130,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log and handle exceptions (not implemented in this example)
+                // Log and handle exceptions
                 // Return 500 - Internal Server Error for unhandled exceptions
                 return StatusCode(500);
             }
@@ -123,7 +141,11 @@ namespace API.Controllers
         /// </summary>
         /// <param name="address">The address to be added.</param>
         /// <returns>Returns the newly added address.</returns>
+        /// <response code="201">Returns the newly added address.</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
+        [ProducesResponseType(typeof(Address), 201)]
+        [ProducesResponseType(500)]
         public IActionResult AddAddress([FromBody] Address address)
         {
             try
@@ -136,7 +158,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Log and handle exceptions (not implemented in this example)
+                // Log and handle exceptions (not implemented)
                 // Return 500 - Internal Server Error for unhandled exceptions
                 return StatusCode(500);
             }
@@ -146,9 +168,16 @@ namespace API.Controllers
         /// Updates an existing address.
         /// </summary>
         /// <param name="id">The ID of the address to be updated.</param>
-        /// <param name="updatedAddress">The updated address information.</param>
+        /// <param name="updatedAddress">The updated address information. the ID in model is ignored</param>
         /// <returns>Returns No Content if the update is successful.</returns>
+        /// <response code="204">No Content</response>
+        /// <response code="404">Existing address Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        /// 
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult UpdateAddress(int id, [FromBody] Address updatedAddress)
         {
             try
@@ -159,7 +188,7 @@ namespace API.Controllers
                 if (existingAddress == null)
                 {
                     // Address not found, return 404 - Not Found
-                    return NotFound();
+                    return NotFound("Address not found");
                 }
 
                 // Set the ID of the updated address and update it in the repository
@@ -176,55 +205,86 @@ namespace API.Controllers
                 return StatusCode(500);
             }
         }
+
         /// <summary>
         /// Deletes an address by ID.
         /// </summary>
         /// <param name="id">The ID of the address to be deleted.</param>
         /// <returns>Returns No Content if the deletion is successful.</returns>
+        /// <response code="204">No Content</response>
+        /// <response code="404">Address Not Found</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public IActionResult DeleteAddress(int id)
         {
-            // Retrieve the address to be deleted by ID from the repository
-            var address = _addressRepository.GetAddress(id);
-
-            if (address ==
-null)
+            try
             {
-                // Address not found, return 404 - Not Found
-                return NotFound();
+                // Retrieve the address to be deleted
+                var address = _addressRepository.GetAddress(id);
+
+                if (address == null)
+                {
+                    return NotFound("Address not found");
+                }
+
+                _addressRepository.DeleteAddress(id);
+
+                return NoContent();
             }
-
-            // Delete the address from the repository
-            _addressRepository.DeleteAddress(id);
-
-            // Return 204 - No Content
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log and handle exceptions (not implemented)
+                return StatusCode(500);
+            }
         }
 
-        /// <summary>
-        /// Calculates the distance between two addresses.
-        /// </summary>
-        /// <param name="addressId1">The ID of the first address.</param>
-        /// <param name="addressId2">The ID of the second address.</param>
-        /// <returns>Returns the calculated distance between the two addresses.</returns>
-        [HttpGet("calculateDistance/{addressId1}/{addressId2}")]
-        public async Task<IActionResult> CalculateDistanceAsync(int addressId1, int addressId2)
+            /// <summary>
+            /// Calculates the distance between two addresses.
+            /// </summary>
+            /// <param name="addressId1">The ID of the first address.</param>
+            /// <param name="addressId2">The ID of the second address.</param>
+            /// <returns>Returns the calculated distance between the two addresses.</returns>
+            /// <response code="200">Returns the calculated distance between the two addresses.</response>
+            /// <response code="404">One of the adresses is n0t fond</response>
+            /// <response code="500">Internal Server Error</response>
+            [HttpGet("calculateDistance/{addressId1}/{addressId2}")]
+        [ProducesResponseType(typeof(Distance), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        
+            public async Task<IActionResult> CalculateDistanceAsync(int addressId1, int addressId2)
         {
-            // Retrieve addresses by ID from the repository
-            var address1 = _addressRepository.GetAddress(addressId1);
-            var address2 = _addressRepository.GetAddress(addressId2);
-
-            if (address1 == null || address2 == null)
+            try
             {
-                // One or both addresses not found, return 404 - Not Found
-                return NotFound();
+                // Retrieve addresses by ID from the repository
+                var address1 = _addressRepository.GetAddress(addressId1);
+                var address2 = _addressRepository.GetAddress(addressId2);
+
+                if (address1 == null || address2 == null)
+                {
+                    return NotFound("One or both addresses not found in DB");
+                }
+
+                // Calculate the distance between the two addresses asynchronously
+                var distance = await _geolocationService.CalculateDistanceAsync(address1, address2);
+
+                // Return 200 - OK with the calculated distance
+                return Ok(distance);
             }
+            catch (Exception ex)
+            {
+                if (ex.Message == "No result found in the geocoding response.")
+                {
+                    // Return 404 - Not Found when geocoding response has no result
+                    return NotFound("No result found in the geocoding response.");
+                }
 
-            // Calculate the distance between the two addresses asynchronously
-            var distance = await _geolocationService.CalculateDistanceAsync(address1, address2);
-
-            // Return 200 - OK with the calculated distance
-            return Ok(distance);
+                // Return 500 - Internal Server Error for unhandled exceptions
+                return StatusCode(500);
+            }
         }
     }
 }
