@@ -4,6 +4,6 @@ namespace API.Services
 {
     public interface IGeolocationService
     {
-        Distance calculateDistance(int AddressId1, int AddressId2);
+        Task<Distance> CalculateDistanceAsync(Address address1, Address address2);
     }
 }

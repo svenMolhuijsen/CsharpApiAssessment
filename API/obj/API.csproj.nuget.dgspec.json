@@ -34,9 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "default"
         }
       },
       "frameworks": {
@@ -46,6 +43,10 @@
             "Dapper": {
               "target": "Package",
               "version": "[2.0.90, )"
+            },
+            "GeoCoordinate.NetCore": {
+              "target": "Package",
+              "version": "[1.0.0.1, )"
             },
             "Microsoft.Data.Sqlite": {
               "target": "Package",

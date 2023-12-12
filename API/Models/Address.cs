@@ -15,5 +15,11 @@ namespace API.Models
         public string City { get; set; }
         [Required]
         public string Country { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Street}, {HouseNumber}, {Postcode}, {City}, {Country}";
+        }
+
     }
 }

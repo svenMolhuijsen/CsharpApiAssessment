@@ -1,12 +1,8 @@
 ﻿using API.Models;
-using Microsoft.Data.Sqlite;
-using System.Data;
-using Dapper;
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata;
 
 namespace API.Repositories
 {
@@ -19,30 +15,47 @@ namespace API.Repositories
             _dbContext = dbContext;
         }
 
+
+        /// <summary>
+        /// Gets a specific address by ID.
+        /// </summary>
         public List<Address> GetAdresses()
         {
             return _dbContext.Addresses.ToList();
         }
 
+        /// <summary>
+        /// Gets a specific address by ID.
+        /// </summary>
+        /// <param name="id">The ID of the address to retrieve.</param>
+        /// <returns>The address with the specified ID.</returns>        
         public Address GetAddress(int id)
         {
             return _dbContext.Addresses.FirstOrDefault(a => a.Id == id);
         }
 
+        /// <summary>
+        /// Gets addresses based on search criteria, sort order, and ascending/descending flag.
+        /// </summary>
+        /// <param name="searchValue">The search criteria for filtering addresses.</param>
+        /// <param name="sortBy">The property to sort addresses by.</param>
+        /// <param name="ascending">True if sorting in ascending order, false for descending order.</param>
+        /// <returns>The list of addresses based on the provided criteria.</returns>
         public List<Address> GetAddresses(string searchValue, string sortBy, bool ascending)
         {
-
             // Search logic
             var propertiesOfType = typeof(Address)
-               .GetProperties()
-               .Where(prop => prop.PropertyType == typeof(string));
+                .GetProperties()
+                .Where(prop => prop.PropertyType == typeof(string));
 
-            List<Address> addresses = null;
+            List<Address> addresses;
 
-
-            if (string.IsNullOrEmpty(searchValue)) {
-                addresses = _dbContext.Addresses.ToList();}
-            else {
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                addresses = _dbContext.Addresses.ToList();
+            }
+            else
+            {
                 addresses = _dbContext.Addresses
                     .AsEnumerable()
                     .Where(address =>
@@ -67,9 +80,13 @@ namespace API.Repositories
             }
 
             return addresses;
-
         }
 
+        /// <summary>
+        /// Adds a new address to the database.
+        /// </summary>
+        /// <param name="address">The address to add.</param>
+        /// <returns>The added address.</returns>
         public Address AddAddress(Address address)
         {
             _dbContext.Addresses.Add(address);
@@ -77,6 +94,12 @@ namespace API.Repositories
             return address;
         }
 
+        /// <summary>
+        /// Updates an existing address by ID.
+        /// </summary>
+        /// <param name="address">The updated address information.</param>
+        /// <param name="id">The ID of the address to update.</param>
+        /// <returns>The updated address.</returns>
         public Address UpdateAddress(Address address, int id)
         {
             var result = _dbContext.Addresses.FirstOrDefault(a => a.Id == id);
@@ -87,18 +110,22 @@ namespace API.Repositories
 
                 _dbContext.SaveChanges();
                 return address;
-
             }
             else
             {
-                throw new Exception("couldntUpdateException");
+                // Throw an exception if the address to update is not found
+                throw new Exception("Could not update the address. Address not found.");
             }
-
         }
 
+        /// <summary>
+        /// Deletes an address by ID.
+        /// </summary>
+        /// <param name="id">The ID of the address to delete.</param>
+        /// <returns>The deleted address.</returns>
         public Address DeleteAddress(int id)
         {
-            //chose to get theb address so its shown which address has been removed
+            // Retrieve the address to be deleted to show which address has been removed
             var address = _dbContext.Addresses.FirstOrDefault(a => a.Id == id);
             if (address != null)
             {
@@ -107,7 +134,5 @@ namespace API.Repositories
             }
             return address;
         }
-
-       
     }
 }
