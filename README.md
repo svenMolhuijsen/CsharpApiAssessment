@@ -19,13 +19,13 @@ Make sure you have the following software installed:
 
 2. navigate to CsharpApiAssessment/API or open the project in visual studio
 
-make sure all paths in Program.cs point to the right place in your environment
+3. make sure all paths in Program.cs point to the right place in your environment
 
 run commands:
 
-dotnet restore
-dotnet build
-dotnet run
+* dotnet restore
+* dotnet build
+* dotnet run
 
 Or run through visual studio (IIS express is tested)
 
