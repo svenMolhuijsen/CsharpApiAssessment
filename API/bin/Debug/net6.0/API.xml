@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>API</name>
+    </assembly>
+    <members>
+        <member name="T:API.Controllers.AddressesController">
+            <summary>
+            API controller for managing addresses.
+            </summary>
+        </member>
+        <member name="M:API.Controllers.AddressesController.#ctor(API.Repositories.IAddressRepository,API.Services.IGeolocationService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:API.Controllers.AddressesController"/> class.
+            </summary>
+            <param name="addressRepository">The address repository.</param>
+            <param name="geolocationService">The geolocation service.</param>
+        </member>
+        <member name="M:API.Controllers.AddressesController.GetAddresses">
+            <summary>
+            Retrieves all addresses.
+            </summary>
+            <returns>Returns a list of all addresses.</returns>
+            <response code="200">Returns a list of all addresses.</response>
+            <response code="204">No addresses found.</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Controllers.AddressesController.GetAddress(System.Int32)">
+            <summary>
+            Retrieves an address by ID.
+            </summary>
+            <param name="id">The ID of the address.</param>
+            <returns>Returns the address with the specified ID.</returns>
+            <response code="200">Returns the address with the specified ID.</response>
+            <response code="204">No address found.</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Controllers.AddressesController.GetAddresses(System.String,System.String,System.Boolean)">
+            <summary>
+            Retrieves filtered and sorted addresses.
+            </summary>
+            <param name="searchValue">The search value for filtering.</param>
+            <param name="sortBy">The property name for sorting.</param>
+            <param name="ascending">Indicates whether to sort in ascending order (default is true).</param>
+            <returns>Returns filtered and sorted addresses.</returns>
+            <response code="200">Returns filtered and sorted addresses.</response>
+            <response code="204">No addresses found.</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Controllers.AddressesController.AddAddress(API.Models.Address)">
+            <summary>
+            Adds a new address.
+            </summary>
+            <param name="address">The address to be added.</param>
+            <returns>Returns the newly added address.</returns>
+            <response code="201">Returns the newly added address.</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Controllers.AddressesController.UpdateAddress(System.Int32,API.Models.Address)">
+            <summary>
+            Updates an existing address.
+            </summary>
+            <param name="id">The ID of the address to be updated.</param>
+            <param name="updatedAddress">The updated address information. the ID in model is ignored</param>
+            <returns>Returns No Content if the update is successful.</returns>
+            <response code="204">No Content</response>
+            <response code="404">Existing address Not Found</response>
+            <response code="500">Internal Server Error</response>
+            
+        </member>
+        <member name="M:API.Controllers.AddressesController.DeleteAddress(System.Int32)">
+            <summary>
+            Deletes an address by ID.
+            </summary>
+            <param name="id">The ID of the address to be deleted.</param>
+            <returns>Returns No Content if the deletion is successful.</returns>
+            <response code="204">No Content</response>
+            <response code="404">Address Not Found</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Controllers.AddressesController.CalculateDistanceAsync(System.Int32,System.Int32)">
+            <summary>
+            Calculates the distance between two addresses.
+            </summary>
+            <param name="addressId1">The ID of the first address.</param>
+            <param name="addressId2">The ID of the second address.</param>
+            <returns>Returns the calculated distance between the two addresses.</returns>
+            <response code="200">Returns the calculated distance between the two addresses.</response>
+            <response code="404">One of the adresses is n0t fond</response>
+            <response code="500">Internal Server Error</response>
+        </member>
+        <member name="M:API.Repositories.AddressRepository.GetAdresses">
+            <summary>
+            Gets a specific address by ID.
+            </summary>
+        </member>
+        <member name="M:API.Repositories.AddressRepository.GetAddress(System.Int32)">
+            <summary>
+            Gets a specific address by ID.
+            </summary>
+            <param name="id">The ID of the address to retrieve.</param>
+            <returns>The address with the specified ID.</returns>        
+        </member>
+        <member name="M:API.Repositories.AddressRepository.GetAddresses(System.String,System.String,System.Boolean)">
+            <summary>
+            Gets addresses based on search criteria, sort order, and ascending/descending flag.
+            </summary>
+            <param name="searchValue">The search criteria for filtering addresses.</param>
+            <param name="sortBy">The property to sort addresses by.</param>
+            <param name="ascending">True if sorting in ascending order, false for descending order.</param>
+            <returns>The list of addresses based on the provided criteria.</returns>
+        </member>
+        <member name="M:API.Repositories.AddressRepository.AddAddress(API.Models.Address)">
+            <summary>
+            Adds a new address to the database.
+            </summary>
+            <param name="address">The address to add.</param>
+            <returns>The added address.</returns>
+        </member>
+        <member name="M:API.Repositories.AddressRepository.UpdateAddress(API.Models.Address,System.Int32)">
+            <summary>
+            Updates an existing address by ID.
+            </summary>
+            <param name="address">The updated address information.</param>
+            <param name="id">The ID of the address to update.</param>
+            <returns>The updated address.</returns>
+        </member>
+        <member name="M:API.Repositories.AddressRepository.DeleteAddress(System.Int32)">
+            <summary>
+            Deletes an address by ID.
+            </summary>
+            <param name="id">The ID of the address to delete.</param>
+            <returns>The deleted address.</returns>
+        </member>
+        <member name="M:API.Services.GeolocationService.CalculateDistanceAsync(API.Models.Address,API.Models.Address)">
+            <summary>
+            Calculates the distance between two addresses using geocoding.
+            </summary>
+            <param name="address1">The first address.</param>
+            <param name="address2">The second address.</param>
+            <returns>The distance between the two addresses in kilometers.</returns>
+        </member>
+        <member name="M:API.Services.GeolocationService.GeocodeAddressAsync(API.Models.Address)">
+            <summary>
+            Geocodes an address using OSM Nominatim API and returns the GeoCoordinate.
+            </summary>
+            <param name="address">The address to geocode.</param>
+            <returns>The GeoCoordinate of the provided address.</returns>
+        </member>
+    </members>
+</doc>
